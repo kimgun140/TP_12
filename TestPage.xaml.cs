@@ -24,15 +24,11 @@ namespace TP_12
     {
         public TestPage()
         {
+
             InitializeComponent();
             //OCTEST();
+            targetimg();
         }
-
-
-
-
-
-
 
 
 
@@ -57,8 +53,8 @@ namespace TP_12
             double minDist = denoisedImg.Rows / 8; // 검출된 원의 중심들 간의 최소 거리
             double param1 = 100; // 캐니 엣지 검출기의 높은 임곗값
             double param2 = 30; // 중심 검출기 임곗값 (값이 낮을수록 더 많은 원이 검출될 수 있음)
-            int minRadius = 0; // 검출할 원의 최소 반지름
-            int maxRadius = 0; // 검출할 원의 최대 반지름
+            int minRadius = 40; // 검출할 원의 최소 반지름
+            int maxRadius = 100; // 검출할 원의 최대 반지름
 
             CircleSegment[] circleSegments = Cv2.HoughCircles(denoisedImg, HoughModes.Gradient, dp, minDist, param1: param1, param2: param2, minRadius: minRadius, maxRadius: maxRadius);
 
@@ -73,6 +69,54 @@ namespace TP_12
             Cv2.WaitKey(0);
             Cv2.DestroyAllWindows();
         }
+
+
+        private void targetimg()
+        {
+
+
+
+            Mat img = Cv2.ImRead(@"C:\Users\LMS\source\repos\TP_12\images\testimage.png"); // 원본
+            Mat targetimg = Cv2.ImRead(@"C:\Users\LMS\source\repos\TP_12\images\pcb_test_2.png"); // 파손이미지 
+            //Mat targetimg = Cv2.ImRead(@"C:\Users\LMS\source\repos\TP_12\images\testimage.png");
+
+            Mat res = new Mat();
+            Mat resized = new Mat();
+            //Cv2.Resize(res, resized, img.Size().Width - res.Size().Width + 1,  img.Size().Height - res.Size().Height +1 );
+               
+            Cv2.MatchTemplate(img, targetimg, res, TemplateMatchModes.CCoeffNormed);
+
+            OpenCvSharp.Point minloc, maxloc; // 찾은 이미지의 유사도 및 위치값받기 
+            double minval, maxval; // 찾은 이미지의 위치를 담을 포인트형 선언 
+            Cv2.MinMaxLoc(res, out minval, out maxval, out minloc, out maxloc);
+
+            var threshold = 0.1;
+
+            //if (maxval >= threshold)
+            //{
+                // 서치된 부분을 빨간 테두리로
+                OpenCvSharp.Rect rect = new OpenCvSharp.Rect(maxloc.X, maxloc.Y, targetimg.Width, targetimg.Height);
+                Cv2.Rectangle(img, rect, new OpenCvSharp.Scalar(0, 0, 255), 2);
+                 aassdd.Text =  maxval.ToString();
+                 aassdd.Text = img.Size().ToString();
+                // 표시
+                Cv2.ImShow("template1_show", img);
+                Cv2.ImShow("targetimg", targetimg);
+
+
+            //}
+            //else
+            //{
+            //    // 낫 매칭
+            //    MessageBox.Show("못찾았슴돠.");
+            //}
+
+
+
+
+
+        }
+
         //public void drawcircle()
         //{
         //    // 이미지 로드
@@ -135,6 +179,8 @@ namespace TP_12
         //        Cv2.ImShow("img", dst);
         //    }
         //}
+
+
     }
 
 }

@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Frame Source="TestPage.xaml"></Frame>
+        <Frame Source="Page1.xaml"></Frame>
+        <!--<Frame Source="TestPage.xaml"></Frame>-->
+
     </Grid>
 </Window>
