@@ -203,10 +203,10 @@ namespace TP_12
             Mat src = new Mat();
             Cv2.Threshold(dil, src, 0, 255, ThresholdTypes.BinaryInv);
             //Cv2.ImShow("src", src);
-
+            //전처리 끝
 
             Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
- 
+ //외곽선 검출
             int cnt = 0;
             OpenCvSharp.Rect boundingRect = Cv2.BoundingRect(contours[cnt]);
             OpenCvSharp.Rect boundingRect1 = Cv2.BoundingRect(contours[1]);
@@ -231,7 +231,10 @@ namespace TP_12
             Mat mat3 = new Mat(src, boundingRect3);
 
             // 오류 검출 이부분 어떻게 만들어야하지 
-            int whitePixelCount = Cv2.CountNonZero(mat3);
+            // 검출한 이미지에서 흰 픽셀 숫자 세기
+            // 검출한 사각형을 알아야하니까 정렬한 리스트에서 찾을 수 있음 
+            // 캡쳐한 사진으로 할거임 
+            int whitePixelCount = Cv2.CountNonZero(mat3);// 흑백사진
             
             if (whitePixelCount >= 1000)
             {
@@ -353,8 +356,6 @@ namespace TP_12
 
             //            //if(length > 1000)
             //            //MessageBox.Show(length.ToString());
-
-
 
 
 
