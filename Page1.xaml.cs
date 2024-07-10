@@ -230,7 +230,7 @@ namespace TP_12
             Mat mat2 = new Mat(frame, boundingRect2);
             Mat mat3 = new Mat(src, boundingRect3);
 
-            // 오류 검출
+            // 오류 검출 이부분 어떻게 만들어야하지 
             int whitePixelCount = Cv2.CountNonZero(mat3);
             
             if (whitePixelCount >= 1000)
@@ -239,7 +239,6 @@ namespace TP_12
             }else
             {
                 MessageBox.Show("정상");
-
             }
             aaaaa.Text = whitePixelCount.ToString();
 
@@ -247,7 +246,7 @@ namespace TP_12
             Cv2.ImShow("aaasss1", mat2);
             Cv2.ImShow("aaasss2", mat3);
 
-            // 테두리 파형 그리기
+            // 테두리 파형 그리기 
             for (cnt = 0; cnt < contours.Length; cnt++)
             {
                 //  넓이 넣기  
@@ -256,7 +255,7 @@ namespace TP_12
                 contourlist.Add(kk);
 
 
-
+                //
                 for (int j = 0; j < contours[cnt].Length; j++)
                 {
                     if (j == 3)
@@ -305,9 +304,9 @@ namespace TP_12
 
             }
             Cv2.ImShow("qwe", frame);
+            // 정렬 된건지 확인 
             contourlist.Sort();
             aaaaa.Text += "\n" + cnt + " " + contourlist[0].ToString();
-
             aaaaa.Text += "\n" + cnt + " " + contourlist[1].ToString();
             aaaaa.Text += "\n" + cnt + " " + contourlist[2].ToString();
             aaaaa.Text += "\n" + cnt + " " + contourlist[3].ToString();
