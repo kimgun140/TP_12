@@ -11,6 +11,8 @@
     <Grid>
         <TextBox x:Name="aaaaa" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="250,248,430,0"/>
         <Button Content="Button" Margin="46,68,578,274" Click="Button_Click"/>
-
+        <Border Margin="300, 20, 20, 200">
+            <Image x:Name="qwer"/>
+        </Border>
     </Grid>
 </Page>
