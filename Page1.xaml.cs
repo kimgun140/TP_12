@@ -29,115 +29,22 @@ namespace TP_12
         int reccount;
         List<Double> contourlist = new List<Double>();
         double kk = 0;
+        List<OpenCvSharp.Rect> opcv = new List<OpenCvSharp.Rect>();
 
         public Page1()
         {
             InitializeComponent();
-            //asdf();
-
+            //string   save = DateTime.Now.ToString("yyyy-MM-dd-hh시mm분ss초"); // t시간 이름 대입
         }
-        public void camtest()
-        {
-            VideoCapture cam = new VideoCapture(0);
-            Mat frame = new Mat();
-            while (Cv2.WaitKey(33) != 'q')
-            {
-                cam.Read(frame);
-                Cv2.ImShow("frame", frame);
-                //Cv2.WaitKey(0);
 
-            }
-            Cv2.DestroyAllWindows();
 
-        }
-        //private void asdf()
-        //{
-        //    VideoCapture cam = new VideoCapture(0);
-        //    Mat frame = new Mat();
-
-        //    while (Cv2.WaitKey(33) != 'q')
-        //    {
-        //        cam.Read(frame);
-        //        Mat gray = new Mat();
-        //        Cv2.CvtColor(frame, gray, ColorConversionCodes.BGR2GRAY);
-        //        Cv2.ImShow("gray", gray);
-
-        //        Mat gaus = new Mat();
-        //        Cv2.GaussianBlur(gray, gaus, new OpenCvSharp.Size(1, 1), 9);
-
-        //        Mat binary = new Mat();
-        //        Cv2.Threshold(gaus, binary, 100, 255, ThresholdTypes.Binary);
-
-        //        Mat element = new Mat();
-        //        Mat Ero = new Mat(1, 1, MatType.CV_8UC1);
-        //        Cv2.Erode(binary, Ero, element);
-
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            Cv2.Erode(Ero, Ero, element);
-        //        }
-
-        //        Cv2.ImShow("erode", Ero);
-
-        //        Mat dil = new Mat();
-        //        Cv2.Dilate(Ero, dil, element);
-
-        //        OpenCvSharp.Point[][] contours;
-        //        OpenCvSharp.HierarchyIndex[] hierarchy;
-
-        //        Mat src = new Mat();
-        //        Cv2.Threshold(dil, src, 0, 255, ThresholdTypes.BinaryInv);
-
-        //        Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
-
-        //        for (int i = 0; i < contours.Length; i++)
-        //        {
-        //            OpenCvSharp.Rect boundingRect = Cv2.BoundingRect(contours[i]);
-
-        //            // 윤곽선에 따른 색상 지정
-        //            Scalar color;
-        //            if (hierarchy[i].Parent < 0)
-        //            {
-        //                color = Scalar.Black;
-        //            }
-        //            else if (hierarchy[i].Child >= 0)
-        //            {
-        //                color = Scalar.Blue;
-        //            }
-        //            else if (hierarchy[i].Next >= 0)
-        //            {
-        //                color = Scalar.Green;
-        //            }
-        //            else
-        //            {
-        //                color = Scalar.Yellow;
-        //            }
-
-        //            Cv2.Rectangle(frame, boundingRect, color, 2);
-
-        //            // 윤곽선 중심에 인덱스 표시
-        //            OpenCvSharp.Point center = new OpenCvSharp.Point(
-        //                boundingRect.X + boundingRect.Width / 2,
-        //                boundingRect.Y + boundingRect.Height / 2
-        //            );
-        //            Cv2.PutText(frame, i.ToString(), center, HersheyFonts.HersheySimplex, 1, color, 2);
-
-        //            // 각 윤곽선에 대해 추가 처리
-        //            //ProcessContour(i, contours[i], hierarchy[i], frame);
-        //        }
-
-        //        Cv2.ImShow("frame", frame);
-        //    }
-
-        //    Cv2.DestroyAllWindows();
-        //}
         private void asdf()
         {
 
             //VideoCapture cam = new VideoCapture(0);
             //Mat frame = new Mat();
             //Mat frame = Cv2.ImRead(@"C:\Users\iot\Source\Repos\kimgun140\TP_12\images\testimage.png"); // testimage.png 정상
-            Mat frame = Cv2.ImRead(@"C:\Users\iot\Source\Repos\kimgun140\TP_12\images\pcb_test_test.png"); // 오류
+            Mat frame = Cv2.ImRead(@"C:\Users\LMS\source\repos\TP_12\images\pcb_test_test.png"); // 오류
             //Mat targetimg = Cv2.ImRead(@"C:\Users\lms\Desktop\TP_12\images\original1.jpg");
             ///
             //while (Cv2.WaitKey(33) != 'q')
@@ -155,8 +62,8 @@ namespace TP_12
 
             //Cv2.Threshold(gray, binary, 254, 255, ThresholdTypes.Binary);
 
-            // 흰색 픽셀의 수를 계산합니다.
-    
+
+
             Mat element = new Mat();
 
             Mat Ero = new Mat(1, 1, MatType.CV_8UC1);
@@ -173,7 +80,7 @@ namespace TP_12
             Cv2.Dilate(Ero, dil, element);
 
 
-            //// erode는 신이야
+            //비디오
             //Cv2.Erode(Ero, Ero, element);
             //Cv2.Dilate(Ero, dil, element);
             //Cv2.Erode(dil, Ero, element);
@@ -206,55 +113,67 @@ namespace TP_12
             //전처리 끝
 
             Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
- //외곽선 검출
+            //외곽선 검출
             int cnt = 0;
             OpenCvSharp.Rect boundingRect = Cv2.BoundingRect(contours[cnt]);
             OpenCvSharp.Rect boundingRect1 = Cv2.BoundingRect(contours[1]);
             OpenCvSharp.Rect boundingRect2 = Cv2.BoundingRect(contours[2]);
             OpenCvSharp.Rect boundingRect3 = Cv2.BoundingRect(contours[3]);
+            //컨투어 opencvcshrarp.rect 리스트에 담기
+            // 담긴 담았는데 구별을 어떻게하지?
+            for (int i = 0; i < contours.Length; i++)
+            {
 
-            // 원구하기 
-            //////Point2f center = new Point2f();
-            //////float radius;
-            //////Cv2.MinEnclosingCircle(contours[1], out center, out radius);// 원 찾으려면  넓이별로 저장해서 크기 비교 작은 2개가 원 //
-            //////Cv2.Circle(frame, (int)center.X, (int)center.Y, (int)radius, Scalar.Yellow, 2);
-            //////double area = Cv2.ContourArea(contours[1], true); // 넓이
-            //////double tt = (Math.Sqrt(area));
-            //////double ra = (double)1 / 2 * tt;
-            //////Cv2.Circle(frame, (int)center.X, (int)center.Y, (int)ra, Scalar.Red, 2);
-            
-            //////Cv2.ImShow("yellow", frame);
+                boundingRect = Cv2.BoundingRect(contours[i]);
+                opcv.Add(boundingRect);
+
+            }
+            //
+
+
+            //원구하기
+            Point2f center = new Point2f();
+            float radius;
+            Cv2.MinEnclosingCircle(contours[1], out center, out radius);// 원 찾으려면  넓이별로 저장해서 크기 비교 작은 2개가 원 //
+            Cv2.Circle(frame, (int)center.X, (int)center.Y, (int)radius, Scalar.Yellow, 2);
+            double area = Cv2.ContourArea(contours[1], true); // 넓이
+            double tt = (Math.Sqrt(area));
+            double ra = (double)1 / 2 * tt;
+            Cv2.Circle(frame, (int)center.X, (int)center.Y, (int)ra, Scalar.Red, 2);
+
+            Cv2.ImShow("yellow", frame);
             ///
 
-            Mat mat1 = new Mat(frame, boundingRect1);
-            Mat mat2 = new Mat(frame, boundingRect2);
+            //Mat mat1 = new Mat(frame, boundingRect1);
+            //Mat mat2 = new Mat(frame, boundingRect2);
             Mat mat3 = new Mat(src, boundingRect3);
 
-            // 오류 검출 이부분 어떻게 만들어야하지 
-            // 검출한 이미지에서 흰 픽셀 숫자 세기
-            // 검출한 사각형을 알아야하니까 정렬한 리스트에서 찾을 수 있음 
-            // 캡쳐한 사진으로 할거임 
-            int whitePixelCount = Cv2.CountNonZero(mat3);// 흑백사진
-            
-            if (whitePixelCount >= 1000)
-            {
-                MessageBox.Show("오류");
-            }else
-            {
-                MessageBox.Show("정상");
-            }
-            aaaaa.Text = whitePixelCount.ToString();
+            // 오류 검출 
 
-            Cv2.ImShow("aaasss" , mat1);
-            Cv2.ImShow("aaasss1", mat2);
+
+            ProcessContour(mat3);
+            //int whitePixelCount = Cv2.CountNonZero(mat3);// 흑백사진
+
+            //if (whitePixelCount >= 1000)
+            //{
+            //    MessageBox.Show("오류");
+            //}else
+            //{
+            //    MessageBox.Show("정상");
+            //}
+            //aaaaa.Text = whitePixelCount.ToString();
+
+            //Cv2.ImShow("aaasss" , mat1);
+            //Cv2.ImShow("aaasss1", mat2);
             Cv2.ImShow("aaasss2", mat3);
+
 
             // 테두리 파형 그리기 
             for (cnt = 0; cnt < contours.Length; cnt++)
             {
-                //  넓이 넣기  
+                //  넓이 넣기   작은거 2개가 원
                 kk = Cv2.ContourArea(contours[cnt]);
-                
+
                 contourlist.Add(kk);
 
 
@@ -296,28 +215,25 @@ namespace TP_12
 
                 }
 
-
-
-                //RotatedRect rotatedRect = Cv2.MinAreaRect(contours[cnt]);
-                //double areaRatio = Cv2.Abs(Cv2.ContourArea(contours[cnt])) / (rotatedRect.Size.Width * rotatedRect.Size.Height);
-
-
-                //Cv2.DrawContours(frame, contours, cnt, Scalar.Red, 2);
-
-
             }
             Cv2.ImShow("qwe", frame);
             // 정렬 된건지 확인 
             contourlist.Sort();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[0].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[1].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[2].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[3].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[4].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[5].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[6].ToString();
-            aaaaa.Text += "\n" + cnt + " " + contourlist[7].ToString();
-            //aaaaa.Text += "\n" + cnt + " " + contourlist[8].ToString();
+            for (int i = 0; i < contourlist.Count; i++)
+            {
+                aaaaa.Text += "\n" + i + " " + contourlist[i].ToString();
+
+            }
+
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[0].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[1].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[2].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[3].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[4].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[5].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[6].ToString();
+            //aaaaa.Text += "\n" + cnt + " " + contourlist[7].ToString();
+            ////aaaaa.Text += "\n" + cnt + " " + contourlist[8].ToString();
 
 
 
@@ -416,28 +332,41 @@ namespace TP_12
         }
 
         private void ProcessContour(Mat frame)
+        //파형검사 
         {
 
-            // 계층별로 검출한걸 이함수에 돌려서 비교 한다.  계층별 컨투어를 비교
-            Mat targetimg = Cv2.ImRead(@"C:\Users\lms\Desktop\TP_12\images\original1.jpg");
-            Mat res = new Mat();
-            Mat resized = new Mat();
+            int whitePixelCount = Cv2.CountNonZero(frame);// 흑백사진
 
-            Cv2.MatchTemplate(frame, targetimg, res, TemplateMatchModes.CCoeffNormed);
-
-            OpenCvSharp.Point minloc, maxloc;
-            double minval, maxval;
-            Cv2.MinMaxLoc(res, out minval, out maxval, out minloc, out maxloc);
-            //Cv2.Resize(res, resized, frame.Size().Width - res.Size().Width + 1, img.Size().Height - res.Size().Height + 1);
-            var threshold = 0.7;
-            if (maxval >= threshold)
+            if (whitePixelCount >= 1000)
             {
-                MessageBox.Show(maxval.ToString());
-
+                MessageBox.Show("오류" + whitePixelCount);
             }
+            else
+            {
+                MessageBox.Show("정상");
+            }
+            aaaaa.Text += whitePixelCount.ToString();
 
-            Cv2.ImShow("img", frame);
-            Cv2.ImShow("targetimg", targetimg);
+
+            //// 계층별로 검출한걸 이함수에 돌려서 비교 한다.  계층별 컨투어를 비교
+            //Mat targetimg = Cv2.ImRead(@"C:\Users\lms\Desktop\TP_12\images\original1.jpg");
+            //Mat res = new Mat();
+            //Mat resized = new Mat();
+
+            //Cv2.MatchTemplate(frame, targetimg, res, TemplateMatchModes.CCoeffNormed);
+
+            //OpenCvSharp.Point minloc, maxloc;
+            //double minval, maxval;
+            //Cv2.MinMaxLoc(res, out minval, out maxval, out minloc, out maxloc);
+            ////Cv2.Resize(res, resized, frame.Size().Width - res.Size().Width + 1, img.Size().Height - res.Size().Height + 1);
+            //var threshold = 0.7;
+            //if (maxval >= threshold)
+            //{
+
+            //}
+
+            //Cv2.ImShow("img", frame);
+            //Cv2.ImShow("targetimg", targetimg);
 
         }
 
@@ -464,26 +393,6 @@ namespace TP_12
 
             Cv2.ImShow("img", img);
             Cv2.ImShow("targetimg", targetimg);
-
-
-            //if (maxval >= threshold)
-            //{
-            //    // 서치된 부분을 빨간 테두리로
-            //    OpenCvSharp.Rect rect = new OpenCvSharp.Rect(maxloc.X, maxloc.Y, targetimg.Width, targetimg.Height);
-            //    Cv2.Rectangle(img, rect, new OpenCvSharp.Scalar(0, 0, 255), 2);
-
-            //    // 표시
-            //    Cv2.ImShow("template1_show", img);
-
-            //}
-            //else
-            //{
-            //    // 낫 매칭
-            //    MessageBox.Show("못찾았슴돠.");
-            //}
-
-
-
 
 
         }
