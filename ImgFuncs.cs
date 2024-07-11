@@ -31,7 +31,7 @@ namespace TP_12
         }
 
 
-        public OpenCvSharp.Mat PreProcessing ()
+        public OpenCvSharp.Mat PreProcessing()
         {
 
             Mat gray = new Mat();
@@ -55,20 +55,24 @@ namespace TP_12
             Mat Ero = new Mat(1, 1, MatType.CV_8UC1);
             Mat dil = new Mat();
 
+            Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
+            Cv2.Canny(binary, asdf, 50, 255);
+            Cv2.ImShow("canny", asdf);
+
             Cv2.Erode(binary, Ero, element);
             Cv2.Erode(Ero, Ero, element);
             Cv2.Dilate(Ero, dil, element);
             Cv2.Erode(dil, Ero, element);
             Cv2.Dilate(Ero, dil, element);
-            Cv2.Erode(dil, Ero, element);
-            Cv2.Dilate(Ero, dil, element);
-            Cv2.Erode(dil, Ero, element);
-            Cv2.Dilate(Ero, dil, element);
-            Cv2.Erode(dil, Ero, element);
-            Cv2.Dilate(Ero, dil, element);
-            Cv2.Erode(dil, Ero, element);
-            Cv2.Dilate(Ero, dil, element);
-            Cv2.Dilate(dil, dil, element);
+            //Cv2.Erode(dil, Ero, element);
+            //Cv2.Dilate(Ero, dil, element);
+            //Cv2.Erode(dil, Ero, element);
+            //Cv2.Dilate(Ero, dil, element);
+            //Cv2.Erode(dil, Ero, element);
+            //Cv2.Dilate(Ero, dil, element);
+            //Cv2.Erode(dil, Ero, element);
+            //Cv2.Dilate(Ero, dil, element);
+            //Cv2.Dilate(dil, dil, element);
 
 
             Mat src = new Mat();
@@ -78,18 +82,19 @@ namespace TP_12
             return src;
 
 
-      
+
         }
 
-        public  bool MakeContours(OpenCvSharp.Mat src)
+        public bool MakeContours(OpenCvSharp.Mat src)
         {
             Mat mat;
             OpenCvSharp.Point[][] contours;
             OpenCvSharp.HierarchyIndex[] hierarchy;
             //Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
-            Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
-            Cv2.Canny(src, src, 50, 255);
-            Cv2.ImShow("canny", src);
+            //Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
+            Mat rsrc = src;
+            //Cv2.Canny(src, src, 50, 255);
+            //Cv2.ImShow("canny", src);
             Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
             int cnt = 0;
@@ -106,15 +111,24 @@ namespace TP_12
                 //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
                 //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
                 double areaSize = Cv2.ContourArea(contours[cnt]);
-                if (areaSize > 900)
+                if (areaSize > 1200)
                 {
+
                     OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
                     Cv2.DrawContours(frame, contours, cnt, Scalar.AliceBlue, 2);
 
                     Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
+
                     mat = new Mat(src, boundingRect12);
+
+                    Mat mat2 = new Mat(rsrc, boundingRect12);
+
+                    Cv2.ImShow("cap", mat);
                     Cv2.ImShow("judgframe", frame);
+
                     if (JudgeErr(mat) == false)
+
+                    //if (JudgeErr(mat) == false)
                     {
                         return false;
                     }
@@ -174,7 +188,6 @@ namespace TP_12
             Cv2.Canny(src, src, 50, 255);
             Cv2.ImShow("canny", src);
             Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
-
             int cnt = 0;
 
             //if (contours.Length != 7)
@@ -194,10 +207,7 @@ namespace TP_12
                 Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
                 mat = new Mat(src, boundingRect12);
                 Cv2.ImShow("frame", frame);
-                //if (JudgeErr(mat) == false)
-                //{
-                //    return false;
-                //}
+
 
 
 
@@ -245,7 +255,7 @@ namespace TP_12
             //return true;
         }
 
-        public bool JudgeErr (OpenCvSharp.Mat mat)
+        public bool JudgeErr(OpenCvSharp.Mat mat)
         {
 
 
