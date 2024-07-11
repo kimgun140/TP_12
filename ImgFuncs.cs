@@ -66,6 +66,8 @@ namespace TP_12
             Cv2.Dilate(Ero, dil, element);
             Cv2.Erode(dil, Ero, element);
             Cv2.Dilate(Ero, dil, element);
+            Cv2.Erode(dil, Ero, element);
+            Cv2.Dilate(Ero, dil, element);
             Cv2.Dilate(dil, dil, element);
 
 
@@ -85,31 +87,36 @@ namespace TP_12
             OpenCvSharp.Point[][] contours;
             OpenCvSharp.HierarchyIndex[] hierarchy;
             //Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
-            Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89L1);
+            Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
+            Cv2.Canny(src, src, 50, 255);
+            Cv2.ImShow("canny", src);
+            Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
             int cnt = 0;
 
-            if (contours.Length != 7)
-            {
-                return false;
-            }
+            //if (contours.Length != 7)
+            //{
+            //    return false;
+            //}
 
             for (cnt = 0; cnt < contours.Length; cnt++)
             {
-                for (int j = 0; j < contours[cnt].Length; j++)
-                {
 
-                    //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
-                    //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+
+                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
+                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+                double areaSize = Cv2.ContourArea(contours[cnt]);
+                if (areaSize > 900)
+                {
                     OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
-                    
+                    Cv2.DrawContours(frame, contours, cnt, Scalar.AliceBlue, 2);
 
                     Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
                     mat = new Mat(src, boundingRect12);
-                    Cv2.ImShow("frame", frame);
-                 if(   JudgeErr(mat) == false)
+                    Cv2.ImShow("judgframe", frame);
+                    if (JudgeErr(mat) == false)
                     {
-                       return false;    
+                        return false;
                     }
 
                 }
@@ -157,7 +164,86 @@ namespace TP_12
 
             return true;
         }
+        public void OnlyMakeContours(OpenCvSharp.Mat src)
+        {
+            Mat mat;
+            OpenCvSharp.Point[][] contours;
+            OpenCvSharp.HierarchyIndex[] hierarchy;
+            //Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
+            Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
+            Cv2.Canny(src, src, 50, 255);
+            Cv2.ImShow("canny", src);
+            Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
+            int cnt = 0;
+
+            //if (contours.Length != 7)
+            //{
+            //    return false;
+            //}
+
+            for (cnt = 0; cnt < contours.Length; cnt++)
+            {
+
+
+                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
+                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+                OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+                Cv2.DrawContours(frame, contours, cnt, Scalar.AliceBlue, 2);
+
+                Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
+                mat = new Mat(src, boundingRect12);
+                Cv2.ImShow("frame", frame);
+                //if (JudgeErr(mat) == false)
+                //{
+                //    return false;
+                //}
+
+
+
+            }
+
+            //for (int j = 0; j < contours[cnt].Length; j++)
+            //{
+            //    if (j == 3)
+            //        break;
+            //    else
+            //    {
+
+            //        //Cv2.Line(frame, contours[cnt][j], contours[cnt][j + 1], Scalar.Red, 2);
+            //    }
+            //}
+            //if (contours[cnt].Length == 4)
+            //{
+            //    //RotatedRect rotatedRect = Cv2.MinAreaRect(contours[cnt]);
+            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Black, 5);
+
+            //}
+            //if (contours[cnt].Length == 0)
+            //{
+            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Red, 5);
+
+            //}
+            //else
+            //{
+            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Green, 5);
+
+
+
+            //    //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
+            //    OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+
+            //    Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
+            //    Mat mat = new Mat(frame, boundingRect12);
+
+            //    //Cv2.ImShow("asd" + cnt, mat);
+
+            //}
+
+
+
+            //return true;
+        }
 
         public bool JudgeErr (OpenCvSharp.Mat mat)
         {
@@ -177,6 +263,12 @@ namespace TP_12
             }
 
             //return false;
+        }
+        public void save_img() //저장
+        {
+            string local_address = "C:\\Users\\iot\\Source\\Repos\\kimgun140\\TP_12\\images\\save_img.jpg";
+            Cv2.ImWrite(local_address, frame);
+
         }
     }
 }

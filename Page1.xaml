@@ -14,5 +14,7 @@
         <Border Margin="300, 20, 20, 200">
             <Image x:Name="qwer"/>
         </Border>
+        <Button x:Name="save_img" Content="saveimg" Margin="455,255,88,111" Click="save_img_Click"/>
+
     </Grid>
 </Page>

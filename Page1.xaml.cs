@@ -30,7 +30,8 @@ namespace TP_12
         List<Double> contourlist = new List<Double>();
         double kk = 0;
         List<OpenCvSharp.Rect> opcv = new List<OpenCvSharp.Rect>();
-   
+            ImgFuncs imgFuncs = new ImgFuncs();
+
 
         public Page1()
         {
@@ -50,7 +51,6 @@ namespace TP_12
             //Mat frame = Cv2.ImRead(@"C:\Users\LMS\source\repos\TP_12\images\pcb_test_test.png"); // 오류
             //Mat targetimg = Cv2.ImRead(@"C:\Users\lms\Desktop\TP_12\images\original1.jpg");
             ///
-            ImgFuncs imgFuncs = new ImgFuncs();
             
 
 
@@ -61,14 +61,15 @@ namespace TP_12
                 Mat frame = imgFuncs.MakeFrame(cam);
 
                 Mat src = imgFuncs.PreProcessing();
-               if( imgFuncs.MakeContours(src) == true)
-                {
-                    aaaaa.Text += "정상";
-                }
-                else
-                {
-                    aaaaa.Text += "에러";
-                }
+                imgFuncs.OnlyMakeContours(src);
+                //if (imgFuncs.OnlyMakeContours(src) == true)
+                //{
+                //    aaaaa.Text += "정상";
+                //}
+                //else
+                //{
+                //    aaaaa.Text += "에러";
+                //}
 
                 ////    cam.Read(frame);
                 ////    Mat gray = new Mat();
@@ -425,6 +426,20 @@ namespace TP_12
             //camtest();
             asdf();
             //targetimg();
+        }
+
+        private void save_img_Click(object sender, RoutedEventArgs e)
+        {
+            imgFuncs.save_img();
+            Mat src = imgFuncs.PreProcessing();
+            if (imgFuncs.MakeContours(src) == true)
+            {
+                aaaaa.Text += "정상";
+            }
+            else
+            {
+                aaaaa.Text += "에러";
+            }
         }
     }
 }
