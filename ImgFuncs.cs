@@ -90,45 +90,41 @@ namespace TP_12
             Mat mat;
             OpenCvSharp.Point[][] contours;
             OpenCvSharp.HierarchyIndex[] hierarchy;
-            //Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
-            //Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
+
             Mat rsrc = src;
-            //Cv2.Canny(src, src, 50, 255);
-            //Cv2.ImShow("canny", src);
+
             Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
             int cnt = 0;
 
-            //if (contours.Length != 7)
-            //{
-            //    return false;
-            //}
 
-            for (cnt = 0; cnt < contours.Length; cnt++)
+
+            for (cnt = 1; cnt < contours.Length; cnt++)
             {
 
 
-                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
-                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
+
                 double areaSize = Cv2.ContourArea(contours[cnt]);
-                if (areaSize > 1200)
+                if (areaSize > 300)
                 {
 
                     OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
                     Cv2.DrawContours(frame, contours, cnt, Scalar.AliceBlue, 2);
 
                     Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
+                    Cv2.Rectangle(src, boundingRect12, Scalar.Black, 5);
+
 
                     mat = new Mat(src, boundingRect12);
-
+                    Mat srcSub = src.SubMat(boundingRect12);
                     Mat mat2 = new Mat(rsrc, boundingRect12);
 
                     Cv2.ImShow("cap", mat);
                     Cv2.ImShow("judgframe", frame);
+                    Cv2.ImShow("srcSub"+cnt, srcSub);
 
-                    if (JudgeErr(mat) == false)
 
-                    //if (JudgeErr(mat) == false)
+                    if (JudgeErr(srcSub) == false)
                     {
                         return false;
                     }
@@ -137,42 +133,6 @@ namespace TP_12
 
             }
 
-            //for (int j = 0; j < contours[cnt].Length; j++)
-            //{
-            //    if (j == 3)
-            //        break;
-            //    else
-            //    {
-
-            //        //Cv2.Line(frame, contours[cnt][j], contours[cnt][j + 1], Scalar.Red, 2);
-            //    }
-            //}
-            //if (contours[cnt].Length == 4)
-            //{
-            //    //RotatedRect rotatedRect = Cv2.MinAreaRect(contours[cnt]);
-            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Black, 5);
-
-            //}
-            //if (contours[cnt].Length == 0)
-            //{
-            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Red, 5);
-
-            //}
-            //else
-            //{
-            //    //Cv2.DrawContours(frame, contours, cnt, Scalar.Green, 5);
-
-
-
-            //    //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
-            //    OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
-
-            //    Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
-            //    Mat mat = new Mat(frame, boundingRect12);
-
-            //    //Cv2.ImShow("asd" + cnt, mat);
-
-            //}
 
 
 
@@ -183,7 +143,6 @@ namespace TP_12
             Mat mat;
             OpenCvSharp.Point[][] contours;
             OpenCvSharp.HierarchyIndex[] hierarchy;
-            //Cv2.FindContours(src, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxTC89KCOS);
             Mat asdf = new OpenCvSharp.Mat(3, 3, MatType.CV_8UC1);
             Cv2.Canny(src, src, 50, 255);
             Cv2.ImShow("canny", src);
@@ -193,13 +152,8 @@ namespace TP_12
 
             for (cnt = 0; cnt < contours.Length; cnt++)
             {
-
-
-                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[1]);
-                //OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
                 OpenCvSharp.Rect boundingRect12 = Cv2.BoundingRect(contours[cnt]);
                 Cv2.DrawContours(frame, contours, cnt, Scalar.AliceBlue, 2);
-
                 Cv2.Rectangle(frame, boundingRect12, Scalar.Yellow, 2);
                 mat = new Mat(src, boundingRect12);
                 Cv2.ImShow("frame", frame);
@@ -214,18 +168,18 @@ namespace TP_12
 
             int whitePixelCount = Cv2.CountNonZero(mat);// 흑백사진
 
-            if (whitePixelCount >= 1000)
+            if (whitePixelCount > 0)
             {
-                //MessageBox.Show("오류" + whitePixelCount);
+ 
                 return false;
             }
             else
             {
-                //MessageBox.Show("정상");
+
                 return true;
             }
 
-            //return false;
+
         }
         public void save_img() //저장
         {
