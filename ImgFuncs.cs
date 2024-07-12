@@ -36,19 +36,13 @@ namespace TP_12
 
             Mat gray = new Mat();
             Cv2.CvtColor(frame, gray, ColorConversionCodes.BGR2GRAY);
-            //Cv2.ImShow("gray", gray);
-            Mat gaus = new Mat();
 
+            Mat gaus = new Mat();
             Cv2.GaussianBlur(gray, gaus, new OpenCvSharp.Size(1, 1), 9);
 
             Mat binary = new Mat();
 
             Cv2.Threshold(gaus, binary, 100, 255, ThresholdTypes.Binary);
-            //Cv2.Threshold(binary, binary, 254, 255, ThresholdTypes.Binary);
-
-            //Cv2.Threshold(gray, binary, 254, 255, ThresholdTypes.Binary);
-
-
 
             Mat element = new Mat();
 
@@ -80,8 +74,6 @@ namespace TP_12
             Cv2.ImShow("src", src);
 
             return src;
-
-
 
         }
 
